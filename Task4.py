@@ -14,38 +14,27 @@ with open('calls.csv', 'r') as f:
 
 """
 TASK 4:
-The telephone company want to identify numbers that might be doing
+The telephone company wants to identify numbers that might be doing
 telephone marketing. Create a set of possible telemarketers:
 these are numbers that make outgoing calls but never send texts,
 receive texts or receive incoming calls.
-
 Print a message:
 "These numbers could be telemarketers: "
 <list of numbers>
 The list of numbers should be print out one per line in lexicographic order with no duplicates.
 """
-receiving_phone = []
 
-for nos1,nos2,nos3,nos4 in calls:
-    if(nos2  not in receiving_phone):
-        receiving_phone.append(nos2)
+dials = {call[0] for call in calls}
+receives = [call[1] for call in calls]
+real_people = set()
 
-for no1,no2,no3 in texts:
-    if(no1 not in receiving_phone):
-        receiving_phone.append(no1)
+for text, receive in zip(texts, receives):
+    for i in range(0, 2):
+        real_people.add(text[i])
+    real_people.add(receive)
 
-    if (no2 not in receiving_phone):
-        receiving_phone.append(no2)
+potential_telemarketers = {call for call in dials if call not in real_people}
+potential_telemarketers = sorted(list(potential_telemarketers))
 
-telemarketers = []
-
-for n1,n2,n3,n4 in calls:
-    if(n1  not in receiving_phone):
-        telemarketers.append(n1)
-
-print("These numbers could be telemarketers:")
-for tele in telemarketers:
-    print(tele)
-
-
-
+print(f"These numbers could be telemarketers: {potential_telemarketers}")
+print(f"Total potential telemarketers: {len(potential_telemarketers)}")
