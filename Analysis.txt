@@ -1,0 +1,18 @@
+Task0
+For task 0 worst case complexity will remain constant regardless of the input data
+
+Task 1 
+There are two for loops so the worst case will remain 2n equivalent to n that means it will grow linearly proportional to input data 
+
+Task 2 
+There is only now for loop so its complexity will remain n
+
+Task 3
+Execution time for the bulk of the code will grow linearly, in direct proportion to the input data. However, the `sorted` function has a complexity of `O(n log n)`, which affects the overall efficiency of the code.
+
+Task 4
+No nested for loop but we are running it 4 times so complexity will n that means it will grow linearly proportional to input datas
+
+
+
+

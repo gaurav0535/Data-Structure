@@ -9,10 +9,6 @@ with open('texts.csv', 'r') as f:
     reader = csv.reader(f)
     texts = list(reader)
 
-with open('calls.csv', 'r') as f:
-    reader = csv.reader(f)
-    calls = list(reader)
-
 """
 TASK 3:
 (080) is the area code for fixed line telephones in Bangalore.
@@ -41,27 +37,66 @@ to other fixed lines in Bangalore."
 The percentage should have 2 decimal digits
 """
 
-bangalore_calls = [call for call in calls if call[0].startswith("(080)")]
+landline_pattern = re.compile(r'^\((0[0-9]+)\)')
 
-bangalore_dialed = [call[1] for call in bangalore_calls]
+def is_bangalore_number(phone_number):
+    return phone_number[:5] == '(080)'
 
-called_areas = []
 
-for call in bangalore_dialed:
-    if re.search("\(\w+\)", call):
-        called_areas.append(re.search(r'(\(.*?\))', call).group(1))
-    elif re.search(r'(^[7|8|9])', call):
-        called_areas.append(call[0:4])
-    clean_calls = sorted(list(set(called_areas)))
+def is_telemarketer(phone_number):
+    return phone_number[:3] == '140'
 
-print(f"The numbers called by people in Bangalore have codes: {clean_calls}")
 
-total_calls = len(bangalore_calls)
+def is_mobile(phone_number):
+    return phone_number[:1] in ['7', '8', '9']
 
-bangalore_to_bangalore = len([call for call in bangalore_calls if call[
-    1].startswith("(080)")])
 
-percentage = round(bangalore_to_bangalore / total_calls, 4) * 100
+def is_landline(phone_number):
+    return landline_pattern.match(phone_number) is not None
 
-print(f"{percentage} percent of calls from fixed lines in Bangalore are calls "
-      f"to other fixed lines in Bangalore.")
+
+def extract_area_code(phone_number):
+
+    if is_telemarketer(phone_number):
+        return '140'
+    if is_mobile(phone_number):
+        return phone_number[:4]
+    if is_landline(phone_number):
+        return landline_pattern.match(phone_number).group(1)
+    return ''
+
+
+with open('calls.csv', 'r') as f:
+    reader = csv.reader(f)
+    calls = list(reader)
+
+    total_from_bangalore = 0
+    total_to_bangalore = 0
+    area_codes = []
+
+    for call in calls:
+        calling, receiving, timestamp, seconds = call
+
+        if not is_bangalore_number(calling):
+            continue
+
+        area_code = extract_area_code(receiving)
+        if not area_code:
+            continue
+        if area_code not in area_codes:
+            area_codes.append(area_code)
+        total_from_bangalore += 1
+
+        if is_bangalore_number(receiving):
+            total_to_bangalore += 1
+
+area_codes = sorted(area_codes)
+
+
+print('The numbers called by people in Bangalore have codes:')
+for area_code in area_codes:
+    print(area_code)
+
+
+areaper = '{:,.2%}'.format(total_to_bangalore / total_from_bangalore)
+print(f'{areaper} percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.')
