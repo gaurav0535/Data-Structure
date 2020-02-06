@@ -16,7 +16,6 @@ Print a message:
 September 2016.".
 """
 
-print(calls[0])
 rec = {}
 
 for a1,a2,a3,a4 in calls:
