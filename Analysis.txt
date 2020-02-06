@@ -11,8 +11,7 @@ Task 3
 Execution time for the bulk of the code will grow linearly, in direct proportion to the input data. However, the `sorted` function has a complexity of `O(n log n)`, which affects the overall efficiency of the code.
 
 Task 4
-No nested for loop but we are running it 4 times so complexity will n that means it will grow linearly proportional to input datas
-
+No nested for loop but we are running it 4 times so complexity will n and sorted() function has nlogn so the worst complexity will be blogs
 
 
 

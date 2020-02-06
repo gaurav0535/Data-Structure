@@ -28,7 +28,7 @@ for a1,a2,a3,a4 in calls:
     if a2 not in rec:
         rec[a2] = int(a4)
     else:
-        rec[a2] = int(rec[a1])+int(a4)
+        rec[a2] = int(rec[a2])+int(a4)
 
 
 
